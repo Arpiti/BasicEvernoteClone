@@ -50,7 +50,7 @@ const Sidebar = ({ notes, classes, selectedNoteIndex, selectNote, deleteNote, ne
                                      index={index}
                                      selectedNoteIndex={selectedNoteIndex}
                                      selectNote={selectNote}
-                                     deleteNote={deleteNote}>
+                                     deleteNote={deleteNote(note)}>
                                 </Sidebaritems>
                                 <Divider/>
                             </div>

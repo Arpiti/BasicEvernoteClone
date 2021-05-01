@@ -3,6 +3,7 @@ import './App.css';
 import { useReadFirestore } from './hooks/useReadFirestore';
 import { updateFirestore } from './hooks/useUpdateFirestore';
 import { createFirestore } from './hooks/useCreateFirestore';
+import { deleteFirestore } from './hooks/useDeleteFirestore';
 
 import Sidebar from './comps/sidebar/Sidebar';
 import Editor from './comps/editor/Editor';
@@ -23,8 +24,25 @@ function App() {
     setSelectedNote(note);
   }
 
-  const deleteNote = () => {
+  const deleteNote = (note) => {
     console.log('This is from Delete Note in App()');
+    const noteIndex = notes.indexOf(note);
+    if(setSelectedNoteIndex === noteIndex)
+    {
+      setSelectedNoteIndex(null);
+      setSelectedNote(null);
+    }
+    else
+    {
+      if(notes.length > 1) 
+      setSelectedNote(notes[setSelectedNoteIndex-1], selectedNoteIndex-1) 
+      else 
+      {
+        setSelectedNoteIndex(null);
+        setSelectedNote(null);
+      }
+    }
+      deleteFirestore('notes',note);
   }
 
   const noteUpdate = (id, noteObj) => {
@@ -32,7 +50,7 @@ function App() {
     updateFirestore('notes',id, noteObj);
   }
 
-   const newNote = async (title) => {
+  const newNote = async (title) => {  
     const note = {
       title : title,
       body : ''
@@ -50,7 +68,7 @@ function App() {
       <Sidebar notes={notes}
         selectedNoteIndex={selectedNoteIndex}
         selectNote={selectNote}
-        deleteNote={deleteNote}
+        deleteNote={() => deleteNote}
         newNote={newNote}>
       </Sidebar>
       {selectedNote ? <Editor selectedNote={selectedNote} selectedNoteIndex={selectedNoteIndex}
